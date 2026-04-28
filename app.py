@@ -1,9 +1,14 @@
-from flask import Flask, request, render_template_string, redirect, send_from_directory
+from flask import Flask, request, render_template_string, redirect, send_from_directory, jsonify
 import sqlite3
 from datetime import datetime
+import razorpay
 
 app = Flask(__name__)
 DB = "water.db"
+RAZORPAY_KEY_ID = "rzp_test_yourkey"
+RAZORPAY_KEY_SECRET = "your_secret"
+
+client = razorpay.Client(auth=(RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET))
 
 # Serve local QR image
 @app.route('/qr-image')
@@ -484,14 +489,51 @@ def recharge():
 
         <input name="amount" placeholder="Recharge Amount" required>
 
-        <button type="button" onclick="openPaymentApp()">
-            📲 Scan QR & Pay
+        <select id="upiApp" style="
+            width:100%;
+            padding:16px;
+            border-radius:18px;
+            margin-bottom:18px;
+            background:rgba(255,255,255,0.05);
+            color:white;
+            border:1px solid rgba(255,255,255,0.08);
+            font-size:15px;
+        ">
+            <option value="">Select UPI App</option>
+            <option value="gpay">Google Pay</option>
+            <option value="phonepe">PhonePe</option>
+            <option value="paytm">Paytm</option>
+            <option value="bhim">BHIM UPI</option>
+        </select>
+
+        <input id="customerUpi" placeholder="Customer UPI ID (example@upi)">
+
+        <button type="button" id="upiOpenBtn" onclick="startRazorpayPayment()">
+            🚀 Pay Securely
         </button>
 
         <br><br>
 
+        <div id="timerBox" style="display:none; margin-top:20px; text-align:center;">
+            <div style="
+                background:rgba(239,68,68,0.15);
+                border:1px solid rgba(239,68,68,0.3);
+                padding:18px;
+                border-radius:18px;
+                color:#fca5a5;
+                font-weight:600;
+            ">
+                ⏳ Payment Link Expires In:
+                <div id="countdown" style="font-size:30px; margin-top:10px;">
+                    05:00
+                </div>
+            </div>
+        </div>
+
+        <br>
+
         <button type="button" id="confirmBtn" onclick="confirmPayment()" style="display:none;">
-            ✅ Customer Completed Payment
+            ✅ Payment Completed
         </button>
     </form>
 
@@ -511,19 +553,15 @@ def recharge():
 
         <br><br>
 
-        <a id="upiPayLink" href="#" target="_blank" style="text-decoration:none;">
-            <button type="button">
-                🚀 Open UPI App
-            </button>
-        </a>
     </div>
 
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
 
         const amountInput = document.querySelector('input[name="amount"]');
         const qrImage = document.getElementById('upiQR');
-        const upiPayLink = document.getElementById('upiPayLink');
+        const timerBox = document.getElementById('timerBox');
 
         function updateQR() {
             const amount = amountInput.value || 0;
@@ -531,31 +569,76 @@ def recharge():
             const upiLink = `upi://pay?pa=atharvkurundkar@okicici&pn=AquaFlow Luxe&am=${amount}&cu=INR`;
 
             qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiLink)}`;
-
-            upiPayLink.href = upiLink;
         }
 
         amountInput.addEventListener('input', updateQR);
 
         updateQR();
 
-        window.openPaymentApp = function() {
-            const amount = amountInput.value || 0;
+        window.startRazorpayPayment = async function() {
 
-            if(amount <= 0) {
-                alert('Please enter recharge amount');
+            const amount = amountInput.value || 0;
+            const cardId = document.querySelector('input[name="card_id"]').value;
+
+            if(amount <= 0){
+                alert('Enter recharge amount');
                 return;
             }
 
-            const payBtn = document.querySelector('#rechargeForm button');
-            const confirmBtn = document.getElementById('confirmBtn');
+            if(cardId === ''){
+                alert('Enter card ID');
+                return;
+            }
 
-            payBtn.innerHTML = '📲 Waiting For Customer Payment...';
-            payBtn.disabled = true;
+            const response = await fetch('/create-order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    amount: amount
+                })
+            });
 
-            confirmBtn.style.display = 'block';
+            const data = await response.json();
 
-            window.location.href = upiPayLink.href;
+            const options = {
+                key: data.key,
+                amount: data.amount,
+                currency: 'INR',
+                name: 'AquaFlow Luxe',
+                description: 'Wallet Recharge',
+                order_id: data.order_id,
+                theme: {
+                    color: '#2563eb'
+                },
+                handler: function (response) {
+
+                    document.querySelector('.message').innerHTML = `
+                        <div style="
+                            background: rgba(34,197,94,0.15);
+                            border: 1px solid rgba(34,197,94,0.35);
+                            padding: 18px;
+                            border-radius: 18px;
+                            color: #86efac;
+                            font-weight: 600;
+                        ">
+                            ✅ Payment Successful<br><br>
+                            Wallet Recharged Successfully
+                        </div>
+                    `;
+
+                    document.getElementById('rechargeForm').submit();
+                },
+                modal: {
+                    ondismiss: function() {
+                        alert('Payment Cancelled');
+                    }
+                }
+            };
+
+            const rzp = new Razorpay(options);
+            rzp.open();
         }
 
         window.confirmPayment = function() {
@@ -584,6 +667,26 @@ def recharge():
 
     </div>
     """, message=message)
+
+# ---------- CREATE RAZORPAY ORDER ----------
+@app.route('/create-order', methods=['POST'])
+def create_order():
+
+    data = request.get_json()
+
+    amount = int(float(data['amount']) * 100)
+
+    order = client.order.create({
+        'amount': amount,
+        'currency': 'INR',
+        'payment_capture': 1
+    })
+
+    return jsonify({
+        'order_id': order['id'],
+        'amount': amount,
+        'key': RAZORPAY_KEY_ID
+    })
 # ---------- ALL CUSTOMERS ----------
 @app.route("/customers")
 def customers():
