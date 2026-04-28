@@ -346,6 +346,10 @@ def home():
     <a class="menu-btn" href="/report">
         <button>📊 Business Analytics</button>
     </a>
+
+    <a class="menu-btn" href="/customers">
+        <button>👥 View Customers</button>
+    </a>
     </div>
 
     <hr>
@@ -580,6 +584,75 @@ def recharge():
 
     </div>
     """, message=message)
+# ---------- ALL CUSTOMERS ----------
+@app.route("/customers")
+def customers():
+
+    conn = sqlite3.connect(DB)
+    c = conn.cursor()
+
+    c.execute("""
+        SELECT card_id, name, mobile, balance
+        FROM customers
+        ORDER BY id DESC
+    """)
+
+    all_customers = c.fetchall()
+
+    conn.close()
+
+    return render_template_string(STYLE + """
+    <div class="container" style="max-width:1100px;">
+
+    <div class="logo">👥</div>
+    <h1>All Customers</h1>
+    <div class="subtitle">
+        Live Customer Database & Wallet Details
+    </div>
+
+    <div style="overflow-x:auto;">
+
+    <table style="
+        width:100%;
+        border-collapse:collapse;
+        margin-top:20px;
+        background:rgba(255,255,255,0.04);
+        border-radius:20px;
+        overflow:hidden;
+    ">
+
+        <tr style="background:rgba(255,255,255,0.08);">
+            <th style="padding:18px; text-align:left;">Card ID</th>
+            <th style="padding:18px; text-align:left;">Customer Name</th>
+            <th style="padding:18px; text-align:left;">Mobile</th>
+            <th style="padding:18px; text-align:left;">Balance</th>
+        </tr>
+
+        {% for customer in customers %}
+
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.06);">
+            <td style="padding:18px;">{{customer[0]}}</td>
+            <td style="padding:18px;">{{customer[1]}}</td>
+            <td style="padding:18px;">{{customer[2]}}</td>
+            <td style="padding:18px; color:#86efac; font-weight:600;">
+                ₹{{customer[3]}}
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    </div>
+
+    <br>
+
+    <a href="/">
+        <button class="back-btn">⬅ Back To Home</button>
+    </a>
+
+    </div>
+    """, customers=all_customers)
 # ---------- REPORT ----------
 @app.route("/report")
 def report():
