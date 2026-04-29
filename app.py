@@ -489,25 +489,6 @@ def recharge():
 
         <input name="amount" placeholder="Recharge Amount" required>
 
-        <select id="upiApp" style="
-            width:100%;
-            padding:16px;
-            border-radius:18px;
-            margin-bottom:18px;
-            background:rgba(255,255,255,0.05);
-            color:white;
-            border:1px solid rgba(255,255,255,0.08);
-            font-size:15px;
-        ">
-            <option value="">Select UPI App</option>
-            <option value="gpay">Google Pay</option>
-            <option value="phonepe">PhonePe</option>
-            <option value="paytm">Paytm</option>
-            <option value="bhim">BHIM UPI</option>
-        </select>
-
-        <input id="customerUpi" placeholder="Customer UPI ID (example@upi)">
-
         <button type="button" id="upiOpenBtn" onclick="startRazorpayPayment()">
             🚀 Pay Securely
         </button>
