@@ -45,109 +45,62 @@ STYLE = """
 
 body{
     min-height:100vh;
-    background:
-        radial-gradient(circle at top left, rgba(56,189,248,0.18), transparent 30%),
-        radial-gradient(circle at bottom right, rgba(59,130,246,0.18), transparent 30%),
-        linear-gradient(135deg,#02131f 0%,#041c2c 40%,#07263d 100%);
-    background-attachment:fixed;
+    background:#06141f;
+    background-image:
+        radial-gradient(circle at top right, rgba(14,165,233,0.15), transparent 25%),
+        radial-gradient(circle at bottom left, rgba(59,130,246,0.12), transparent 25%);
     display:flex;
     justify-content:center;
     align-items:center;
-    padding:40px 20px;
-    overflow-x:hidden;
-    position:relative;
+    padding:30px 16px;
+    color:white;
 }
 
-body::before{
-    content:'';
-    position:fixed;
-    inset:0;
-    background-image:
-        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-    background-size:55px 55px;
-    pointer-events:none;
-}
 
 .container{
     width:100%;
     max-width:520px;
-    background:rgba(255,255,255,0.08);
-    backdrop-filter:blur(24px);
-    -webkit-backdrop-filter:blur(24px);
-    border:1px solid rgba(255,255,255,0.1);
-    border-radius:38px;
-    padding:42px;
-    box-shadow:
-        0 25px 60px rgba(0,0,0,0.45),
-        inset 0 1px 1px rgba(255,255,255,0.08),
-        0 0 40px rgba(14,165,233,0.12);
-    position:relative;
-    overflow:hidden;
+    background:#0b1d2a;
+    border:1px solid rgba(255,255,255,0.06);
+    border-radius:30px;
+    padding:34px;
+    box-shadow:0 20px 60px rgba(0,0,0,0.45);
 }
 
-.container::before{
-    content:'';
-    position:absolute;
-    width:260px;
-    height:260px;
-    background:radial-gradient(circle, rgba(14,165,233,0.35), transparent 70%);
-    border-radius:50%;
-    top:-120px;
-    right:-120px;
-    filter:blur(30px);
-}
-
-.container::after{
-    content:'';
-    position:absolute;
-    width:180px;
-    height:180px;
-    background:radial-gradient(circle, rgba(96,165,250,0.22), transparent 70%);
-    border-radius:50%;
-    bottom:-90px;
-    left:-90px;
-    filter:blur(25px);
-}
 
 .logo{
-    width:105px;
-    height:105px;
-    margin:0 auto 24px;
-    border-radius:32px;
+    width:88px;
+    height:88px;
+    margin:0 auto 22px;
+    border-radius:24px;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:48px;
-    background:linear-gradient(135deg,#38bdf8,#2563eb,#1d4ed8);
-    box-shadow:
-        0 15px 40px rgba(37,99,235,0.45),
-        inset 0 1px 1px rgba(255,255,255,0.15);
-    position:relative;
+    font-size:40px;
+    background:linear-gradient(135deg,#0ea5e9,#2563eb);
+    box-shadow:0 12px 35px rgba(37,99,235,0.35);
 }
 
 h1{
-    font-size:42px;
-    margin-bottom:10px;
-    background:linear-gradient(to right,#ffffff,#bae6fd);
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-    letter-spacing:0.5px;
+    font-size:34px;
+    font-weight:700;
+    text-align:center;
+    color:white;
+    margin-bottom:8px;
 }
 
 .subtitle{
     text-align:center;
-    color:rgba(255,255,255,0.72);
-    margin-bottom:35px;
+    color:#94a3b8;
+    margin-bottom:28px;
     font-size:14px;
-    line-height:1.8;
-    letter-spacing:0.4px;
 }
 
 .nav-grid{
     display:grid;
     gap:16px;
     margin-bottom:30px;
+    grid-template-columns:1fr 1fr;
 }
 
 .menu-btn{
@@ -156,51 +109,42 @@ h1{
 
 button{
     width:100%;
-    padding:18px;
+    padding:16px;
     border:none;
-    border-radius:22px;
-    background:linear-gradient(135deg,#0ea5e9,#2563eb,#1d4ed8);
+    border-radius:16px;
+    background:linear-gradient(135deg,#0ea5e9,#2563eb);
     color:white;
     font-size:15px;
     font-weight:600;
     cursor:pointer;
-    transition:all 0.3s ease;
-    box-shadow:
-        0 12px 30px rgba(37,99,235,0.35),
-        inset 0 1px 1px rgba(255,255,255,0.12);
-    position:relative;
-    overflow:hidden;
+    transition:0.25s ease;
 }
 
 button:hover{
-    transform:translateY(-4px) scale(1.02);
-    box-shadow:
-        0 18px 40px rgba(37,99,235,0.45),
-        0 0 20px rgba(14,165,233,0.35);
+    transform:translateY(-2px);
+    opacity:0.95;
 }
 
 .section,
 .info,
 .qr-box{
-    background:rgba(255,255,255,0.05);
-    border:1px solid rgba(255,255,255,0.08);
-    border-radius:28px;
-    padding:28px;
-    box-shadow:inset 0 1px 1px rgba(255,255,255,0.04);
+    background:#102434;
+    border:1px solid rgba(255,255,255,0.05);
+    border-radius:22px;
+    padding:24px;
 }
 
 input{
     width:100%;
-    padding:18px 20px;
-    margin-bottom:18px;
-    border:none;
-    border-radius:20px;
-    background:rgba(255,255,255,0.07);
+    padding:16px;
+    margin-bottom:16px;
+    border-radius:16px;
+    border:1px solid rgba(255,255,255,0.08);
+    background:#081520;
     color:white;
     font-size:15px;
     outline:none;
-    transition:all 0.3s ease;
-    border:1px solid transparent;
+    transition:0.25s ease;
 }
 
 input::placeholder{
@@ -208,9 +152,8 @@ input::placeholder{
 }
 
 input:focus{
-    background:rgba(255,255,255,0.1);
-    border:1px solid rgba(56,189,248,0.4);
-    box-shadow:0 0 0 5px rgba(14,165,233,0.15);
+    border-color:#38bdf8;
+    box-shadow:0 0 0 4px rgba(56,189,248,0.12);
 }
 
 .message{
@@ -236,14 +179,11 @@ input:focus{
 }
 
 .qr-box img{
-    width:250px;
-    height:250px;
-    border-radius:28px;
+    width:230px;
+    height:230px;
+    border-radius:20px;
     background:white;
-    padding:12px;
-    box-shadow:
-        0 20px 40px rgba(0,0,0,0.35),
-        0 0 30px rgba(14,165,233,0.2);
+    padding:10px;
 }
 
 .qr-title{
@@ -263,9 +203,10 @@ input:focus{
 }
 
 table{
-    color:white;
-    backdrop-filter:blur(14px);
-    border-radius:24px;
+    width:100%;
+    border-collapse:collapse;
+    background:#102434;
+    border-radius:20px;
     overflow:hidden;
 }
 
@@ -303,6 +244,9 @@ hr{
         width:85px;
         height:85px;
         font-size:38px;
+    }
+    .nav-grid{
+        grid-template-columns:1fr;
     }
 }
 
