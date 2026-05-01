@@ -5,8 +5,8 @@ import razorpay
 
 app = Flask(__name__)
 DB = "water.db"
-RAZORPAY_KEY_ID = "rzp_test_xxxxxxxxx"
-RAZORPAY_KEY_SECRET = "xxxxxxxxxxxxx"
+RAZORPAY_KEY_ID = "rzp_test_SjvV9KRZXcWeL9"
+RAZORPAY_KEY_SECRET = "DVnW4o5WEtUpz1V7hDzG0ieW"
 
 client = razorpay.Client(auth=(RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET))
 
