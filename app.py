@@ -583,40 +583,71 @@ def recharge():
 
             const data = await response.json();
 
-            const options = {
-                key: data.key,
-                amount: data.amount,
-                currency: 'INR',
-                name: 'AquaFlow Luxe',
-                description: 'Wallet Recharge',
-                order_id: data.order_id,
-                theme: {
-                    color: '#2563eb'
-                },
-                handler: function (response) {
+           const options = {
+    key: data.key,
+    amount: data.amount,
+    currency: 'INR',
+    name: 'AquaFlow Luxe',
+    description: 'Wallet Recharge',
+    order_id: data.order_id,
 
-                    document.querySelector('.message').innerHTML = `
-                        <div style="
-                            background: rgba(34,197,94,0.15);
-                            border: 1px solid rgba(34,197,94,0.35);
-                            padding: 18px;
-                            border-radius: 18px;
-                            color: #86efac;
-                            font-weight: 600;
-                        ">
-                            ✅ Payment Successful<br><br>
-                            Wallet Recharged Successfully
-                        </div>
-                    `;
+    method: {
+        upi: true,
+        card: false,
+        netbanking: false,
+        wallet: false,
+        emi: false,
+        paylater: false
+    },
 
-                    document.getElementById('rechargeForm').submit();
-                },
-                modal: {
-                    ondismiss: function() {
-                        alert('Payment Cancelled');
-                    }
+    config: {
+        display: {
+            blocks: {
+                upi: {
+                    name: 'Pay using UPI',
+                    instruments: [
+                        {
+                            method: 'upi'
+                        }
+                    ]
                 }
-            };
+            },
+            sequence: ['block.upi'],
+            preferences: {
+                show_default_blocks: false
+            }
+        }
+    },
+
+    theme: {
+        color: '#2563eb'
+    },
+
+    handler: function (response) {
+
+        document.querySelector('.message').innerHTML = `
+            <div style="
+                background: rgba(34,197,94,0.15);
+                border: 1px solid rgba(34,197,94,0.35);
+                padding: 18px;
+                border-radius: 18px;
+                color: #86efac;
+                font-weight: 600;
+            ">
+                ✅ Payment Successful<br><br>
+                Wallet Recharged Successfully
+            </div>
+        `;
+
+        document.getElementById('rechargeForm').submit();
+    },
+
+    modal: {
+        ondismiss: function() {
+            alert('Payment Cancelled');
+        }
+    }
+};        
 
             const rzp = new Razorpay(options);
             rzp.open();
