@@ -33,151 +33,136 @@ def qr_image():
 # ---------- CSS STYLE ----------
 STYLE = """
 <style>
-
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
-
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
     font-family:'Poppins',sans-serif;
 }
-
 body{
     min-height:100vh;
-    background:#06141f;
+    background:#eaf7ff;
     background-image:
-        radial-gradient(circle at top right, rgba(14,165,233,0.15), transparent 25%),
-        radial-gradient(circle at bottom left, rgba(59,130,246,0.12), transparent 25%);
+        linear-gradient(to bottom, rgba(255,255,255,0.94), rgba(222,242,255,0.92)),
+        url('https://images.unsplash.com/photo-1502741338009-cac2772e18bc?q=80&w=1974&auto=format&fit=crop');
+    background-size:cover;
+    background-position:center;
     display:flex;
     justify-content:center;
     align-items:center;
     padding:30px 16px;
-    color:white;
+    color:#06263d;
 }
-
-
 .container{
     width:100%;
-    max-width:520px;
-    background:#0b1d2a;
-    border:1px solid rgba(255,255,255,0.06);
-    border-radius:30px;
-    padding:34px;
-    box-shadow:0 20px 60px rgba(0,0,0,0.45);
+    max-width:560px;
+    background:rgba(255,255,255,0.82);
+    backdrop-filter:blur(18px);
+    border-radius:32px;
+    padding:38px;
+    box-shadow:0 25px 70px rgba(15,23,42,0.15);
+    border:1px solid rgba(255,255,255,0.7);
 }
-
-
 .logo{
-    width:88px;
-    height:88px;
+    width:95px;
+    height:95px;
     margin:0 auto 22px;
-    border-radius:24px;
+    border-radius:28px;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:40px;
-    background:linear-gradient(135deg,#0ea5e9,#2563eb);
-    box-shadow:0 12px 35px rgba(37,99,235,0.35);
-}
-
-h1{
-    font-size:34px;
-    font-weight:700;
-    text-align:center;
+    font-size:44px;
+    background:linear-gradient(135deg,#00a6ff,#0066ff);
     color:white;
-    margin-bottom:8px;
+    box-shadow:0 15px 40px rgba(0,102,255,0.22);
 }
-
+h1{
+    font-size:38px;
+    font-weight:800;
+    text-align:center;
+    color:#003b73;
+    margin-bottom:8px;
+    letter-spacing:-1px;
+}
 .subtitle{
     text-align:center;
-    color:#94a3b8;
-    margin-bottom:28px;
-    font-size:14px;
+    color:#3f6b8c;
+    margin-bottom:30px;
+    font-size:15px;
+    font-weight:500;
 }
-
 .nav-grid{
     display:grid;
     gap:16px;
     margin-bottom:30px;
     grid-template-columns:1fr 1fr;
 }
-
 .menu-btn{
     text-decoration:none;
 }
-
 button{
     width:100%;
     padding:16px;
     border:none;
-    border-radius:16px;
-    background:linear-gradient(135deg,#0ea5e9,#2563eb);
+    border-radius:18px;
+    background:linear-gradient(135deg,#00a6ff,#0066ff);
     color:white;
     font-size:15px;
-    font-weight:600;
+    font-weight:700;
     cursor:pointer;
     transition:0.25s ease;
+    box-shadow:0 10px 25px rgba(0,102,255,0.18);
 }
-
 button:hover{
-    transform:translateY(-2px);
-    opacity:0.95;
+    transform:translateY(-3px);
+    box-shadow:0 18px 35px rgba(0,102,255,0.22);
 }
-
 .section,
 .info,
 .qr-box{
-    background:#102434;
-    border:1px solid rgba(255,255,255,0.05);
+    background:rgba(222,242,255,0.38);
+    border:1px solid rgba(0,166,255,0.08);
     border-radius:22px;
     padding:24px;
 }
-
 input{
     width:100%;
     padding:16px;
     margin-bottom:16px;
     border-radius:16px;
-    border:1px solid rgba(255,255,255,0.08);
-    background:#081520;
-    color:white;
+    border:1px solid #c2e5fa;
+    background:#f7fbfd;
+    color:#003b73;
     font-size:15px;
     outline:none;
     transition:0.25s ease;
 }
-
 input::placeholder{
-    color:rgba(255,255,255,0.6);
+    color:#7dbbe6;
 }
-
 input:focus{
-    border-color:#38bdf8;
-    box-shadow:0 0 0 4px rgba(56,189,248,0.12);
+    border-color:#00a6ff;
+    box-shadow:0 0 0 4px rgba(0,166,255,0.11);
 }
-
 .message{
     text-align:center;
     margin-top:22px;
-    color:white;
-    font-weight:500;
+    color:#0066ff;
+    font-weight:600;
 }
-
 .info{
     margin-top:24px;
 }
-
 .info p,
 .info h3{
     margin-bottom:14px;
-    color:white;
+    color:#003b73;
 }
-
 .qr-box{
     margin-top:25px;
     text-align:center;
 }
-
 .qr-box img{
     width:230px;
     height:230px;
@@ -185,71 +170,58 @@ input:focus{
     background:white;
     padding:10px;
 }
-
 .qr-title{
-    color:white;
+    color:#003b73;
     font-size:16px;
     font-weight:600;
     margin-bottom:14px;
 }
-
 .upi-id{
-    color:rgba(255,255,255,0.65);
+    color:#3f6b8c;
     font-size:14px;
 }
-
 .back-btn{
     margin-top:24px;
 }
-
 table{
     width:100%;
     border-collapse:collapse;
-    background:#102434;
+    background:rgba(222,242,255,0.38);
     border-radius:20px;
     overflow:hidden;
 }
-
 th{
-    background:rgba(255,255,255,0.08);
+    background:rgba(0,166,255,0.08);
 }
-
 td,th{
     padding:18px;
 }
-
 tr{
-    border-bottom:1px solid rgba(255,255,255,0.08);
+    border-bottom:1px solid #c2e5fa;
 }
-
 hr{
     border:none;
     height:1px;
-    background:rgba(255,255,255,0.1);
+    background:rgba(0,166,255,0.09);
     margin:28px 0;
 }
-
 @media(max-width:600px){
-
     .container{
-        padding:28px 22px;
-        border-radius:28px;
+        padding:28px 10px;
+        border-radius:22px;
     }
-
     h1{
-        font-size:30px;
+        font-size:28px;
     }
-
     .logo{
-        width:85px;
-        height:85px;
-        font-size:38px;
+        width:70px;
+        height:70px;
+        font-size:30px;
     }
     .nav-grid{
         grid-template-columns:1fr;
     }
 }
-
 </style>
 """
 
@@ -323,9 +295,9 @@ def home():
     return render_template_string(STYLE + """
     <div class="container">
 
-    <div class="logo">💧</div>
-    <h1>AquaFlow Luxe</h1>
-    <div class="subtitle">Luxury Smart Water Operations Platform</div>
+    <div class="logo">🌊</div>
+    <h1>AquaFlow</h1>
+    <div class="subtitle">Pure • Fresh • Premium Drinking Water</div>
 
     <div class="nav-grid">
     <a class="menu-btn" href="/add">
@@ -469,8 +441,8 @@ def recharge():
     <div class="container">
 
     <div class="logo">💳</div>
-    <h2>Recharge Balance</h2>
-    <div class="subtitle">Add Wallet Balance Instantly</div>
+    <h2>Recharge Wallet</h2>
+    <div class="subtitle">Fast & Secure UPI Recharge</div>
 
     <form method="post" id="rechargeForm">
         <input name="card_id" placeholder="Card ID" required>
@@ -804,8 +776,8 @@ def report():
     <div class="container">
 
     <div class="logo">📊</div>
-    <h1>Business Analytics</h1>
-    <div class="subtitle">Daily Revenue & Jar Reports</div>
+    <h1>AquaFlow Insights</h1>
+    <div class="subtitle">Daily Water Operations & Revenue Overview</div>
 
     <div class="info">
         <h3>Total Jars Sold: {{jars}}</h3>
