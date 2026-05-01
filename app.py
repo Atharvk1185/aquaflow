@@ -46,29 +46,42 @@ STYLE = """
 body{
     min-height:100vh;
     background:
-        linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
-        url('https://images.unsplash.com/photo-1502741338009-cac2772e18bc?q=80&w=2000&auto=format&fit=crop');
-    background-size:cover;
-    background-position:center;
+        radial-gradient(circle at top left, rgba(56,189,248,0.18), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(59,130,246,0.18), transparent 30%),
+        linear-gradient(135deg,#02131f 0%,#041c2c 40%,#07263d 100%);
     background-attachment:fixed;
     display:flex;
     justify-content:center;
     align-items:center;
     padding:40px 20px;
     overflow-x:hidden;
+    position:relative;
+}
+
+body::before{
+    content:'';
+    position:fixed;
+    inset:0;
+    background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size:55px 55px;
+    pointer-events:none;
 }
 
 .container{
     width:100%;
     max-width:520px;
     background:rgba(255,255,255,0.08);
-    backdrop-filter:blur(18px);
-    -webkit-backdrop-filter:blur(18px);
-    border:1px solid rgba(255,255,255,0.12);
-    border-radius:35px;
-    padding:40px;
+    backdrop-filter:blur(24px);
+    -webkit-backdrop-filter:blur(24px);
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:38px;
+    padding:42px;
     box-shadow:
-        0 8px 32px rgba(0,0,0,0.45);
+        0 25px 60px rgba(0,0,0,0.45),
+        inset 0 1px 1px rgba(255,255,255,0.08),
+        0 0 40px rgba(14,165,233,0.12);
     position:relative;
     overflow:hidden;
 }
@@ -76,45 +89,59 @@ body{
 .container::before{
     content:'';
     position:absolute;
-    width:220px;
-    height:220px;
-    background:rgba(59,130,246,0.25);
+    width:260px;
+    height:260px;
+    background:radial-gradient(circle, rgba(14,165,233,0.35), transparent 70%);
     border-radius:50%;
     top:-120px;
-    right:-100px;
-    filter:blur(40px);
+    right:-120px;
+    filter:blur(30px);
+}
+
+.container::after{
+    content:'';
+    position:absolute;
+    width:180px;
+    height:180px;
+    background:radial-gradient(circle, rgba(96,165,250,0.22), transparent 70%);
+    border-radius:50%;
+    bottom:-90px;
+    left:-90px;
+    filter:blur(25px);
 }
 
 .logo{
-    width:100px;
-    height:100px;
-    margin:0 auto 20px;
-    border-radius:30px;
+    width:105px;
+    height:105px;
+    margin:0 auto 24px;
+    border-radius:32px;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:45px;
-    background:linear-gradient(135deg,#00c6ff,#0072ff);
-    box-shadow:0 10px 30px rgba(0,114,255,0.45);
-}
-
-h1,h2{
-    text-align:center;
-    color:white;
-    font-weight:700;
+    font-size:48px;
+    background:linear-gradient(135deg,#38bdf8,#2563eb,#1d4ed8);
+    box-shadow:
+        0 15px 40px rgba(37,99,235,0.45),
+        inset 0 1px 1px rgba(255,255,255,0.15);
+    position:relative;
 }
 
 h1{
-    font-size:40px;
-    margin-bottom:8px;
+    font-size:42px;
+    margin-bottom:10px;
+    background:linear-gradient(to right,#ffffff,#bae6fd);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    letter-spacing:0.5px;
 }
 
 .subtitle{
     text-align:center;
-    color:rgba(255,255,255,0.75);
+    color:rgba(255,255,255,0.72);
     margin-bottom:35px;
     font-size:14px;
-    line-height:1.7;
+    line-height:1.8;
+    letter-spacing:0.4px;
 }
 
 .nav-grid{
@@ -131,41 +158,49 @@ button{
     width:100%;
     padding:18px;
     border:none;
-    border-radius:18px;
-    background:linear-gradient(135deg,#00c6ff,#0072ff);
+    border-radius:22px;
+    background:linear-gradient(135deg,#0ea5e9,#2563eb,#1d4ed8);
     color:white;
     font-size:15px;
     font-weight:600;
     cursor:pointer;
-    transition:0.3s;
-    box-shadow:0 8px 25px rgba(0,114,255,0.35);
+    transition:all 0.3s ease;
+    box-shadow:
+        0 12px 30px rgba(37,99,235,0.35),
+        inset 0 1px 1px rgba(255,255,255,0.12);
+    position:relative;
+    overflow:hidden;
 }
 
 button:hover{
-    transform:translateY(-3px) scale(1.02);
-    box-shadow:0 12px 30px rgba(0,114,255,0.45);
+    transform:translateY(-4px) scale(1.02);
+    box-shadow:
+        0 18px 40px rgba(37,99,235,0.45),
+        0 0 20px rgba(14,165,233,0.35);
 }
 
 .section,
 .info,
 .qr-box{
-    background:rgba(255,255,255,0.06);
+    background:rgba(255,255,255,0.05);
     border:1px solid rgba(255,255,255,0.08);
-    border-radius:25px;
-    padding:25px;
+    border-radius:28px;
+    padding:28px;
+    box-shadow:inset 0 1px 1px rgba(255,255,255,0.04);
 }
 
 input{
     width:100%;
-    padding:18px;
+    padding:18px 20px;
     margin-bottom:18px;
     border:none;
-    border-radius:18px;
-    background:rgba(255,255,255,0.08);
+    border-radius:20px;
+    background:rgba(255,255,255,0.07);
     color:white;
     font-size:15px;
     outline:none;
-    transition:0.3s;
+    transition:all 0.3s ease;
+    border:1px solid transparent;
 }
 
 input::placeholder{
@@ -173,8 +208,9 @@ input::placeholder{
 }
 
 input:focus{
-    background:rgba(255,255,255,0.12);
-    box-shadow:0 0 0 4px rgba(0,198,255,0.2);
+    background:rgba(255,255,255,0.1);
+    border:1px solid rgba(56,189,248,0.4);
+    box-shadow:0 0 0 5px rgba(14,165,233,0.15);
 }
 
 .message{
@@ -200,12 +236,14 @@ input:focus{
 }
 
 .qr-box img{
-    width:240px;
-    height:240px;
-    border-radius:25px;
+    width:250px;
+    height:250px;
+    border-radius:28px;
     background:white;
-    padding:10px;
-    box-shadow:0 10px 30px rgba(0,0,0,0.35);
+    padding:12px;
+    box-shadow:
+        0 20px 40px rgba(0,0,0,0.35),
+        0 0 30px rgba(14,165,233,0.2);
 }
 
 .qr-title{
@@ -226,6 +264,9 @@ input:focus{
 
 table{
     color:white;
+    backdrop-filter:blur(14px);
+    border-radius:24px;
+    overflow:hidden;
 }
 
 th{
