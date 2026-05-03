@@ -42,55 +42,66 @@ STYLE = """
 }
 body{
     min-height:100vh;
-    background:#eaf7ff;
-    background-image:
-        linear-gradient(to bottom, rgba(255,255,255,0.94), rgba(222,242,255,0.92)),
-        url('https://images.unsplash.com/photo-1502741338009-cac2772e18bc?q=80&w=1974&auto=format&fit=crop');
+    background:
+        linear-gradient(135deg, rgba(240,249,255,0.92), rgba(224,242,254,0.88)),
+        url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2070&auto=format&fit=crop');
     background-size:cover;
     background-position:center;
+    background-attachment:fixed;
     display:flex;
     justify-content:center;
     align-items:center;
-    padding:30px 16px;
+    padding:40px 18px;
     color:#06263d;
+    position:relative;
+    overflow-x:hidden;
 }
 .container{
     width:100%;
-    max-width:560px;
-    background:rgba(255,255,255,0.82);
-    backdrop-filter:blur(18px);
-    border-radius:32px;
-    padding:38px;
-    box-shadow:0 25px 70px rgba(15,23,42,0.15);
-    border:1px solid rgba(255,255,255,0.7);
+    max-width:580px;
+    background:rgba(255,255,255,0.72);
+    backdrop-filter:blur(24px);
+    -webkit-backdrop-filter:blur(24px);
+    border-radius:36px;
+    padding:42px;
+    border:1px solid rgba(255,255,255,0.85);
+    box-shadow:
+        0 25px 80px rgba(15,23,42,0.18),
+        inset 0 1px 0 rgba(255,255,255,0.6);
+    position:relative;
 }
 .logo{
-    width:95px;
-    height:95px;
-    margin:0 auto 22px;
-    border-radius:28px;
+    width:110px;
+    height:110px;
+    margin:0 auto 24px;
+    border-radius:34px;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:44px;
-    background:linear-gradient(135deg,#00a6ff,#0066ff);
+    font-size:48px;
+    background:linear-gradient(145deg,#00c6ff,#0072ff);
     color:white;
-    box-shadow:0 15px 40px rgba(0,102,255,0.22);
+    box-shadow:
+        0 18px 45px rgba(0,114,255,0.28),
+        inset 0 2px 10px rgba(255,255,255,0.35);
+    border:1px solid rgba(255,255,255,0.5);
 }
 h1{
-    font-size:38px;
+    font-size:44px;
     font-weight:800;
     text-align:center;
     color:#003b73;
-    margin-bottom:8px;
-    letter-spacing:-1px;
+    margin-bottom:10px;
+    letter-spacing:-1.5px;
+    text-shadow:0 2px 10px rgba(255,255,255,0.4);
 }
 .subtitle{
     text-align:center;
-    color:#3f6b8c;
-    margin-bottom:30px;
+    color:#4b7391;
+    margin-bottom:34px;
     font-size:15px;
     font-weight:500;
+    letter-spacing:0.3px;
 }
 .nav-grid{
     display:grid;
@@ -103,47 +114,60 @@ h1{
 }
 button{
     width:100%;
-    padding:16px;
+    padding:17px;
     border:none;
-    border-radius:18px;
-    background:linear-gradient(135deg,#00a6ff,#0066ff);
+    border-radius:22px;
+    background:linear-gradient(135deg,#00c6ff,#0072ff);
     color:white;
     font-size:15px;
     font-weight:700;
     cursor:pointer;
-    transition:0.25s ease;
-    box-shadow:0 10px 25px rgba(0,102,255,0.18);
+    transition:all 0.3s ease;
+    box-shadow:
+        0 14px 30px rgba(0,114,255,0.24),
+        inset 0 1px 0 rgba(255,255,255,0.3);
+    position:relative;
+    overflow:hidden;
 }
 button:hover{
-    transform:translateY(-3px);
-    box-shadow:0 18px 35px rgba(0,102,255,0.22);
+    transform:translateY(-4px) scale(1.01);
+    box-shadow:
+        0 22px 40px rgba(0,114,255,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.35);
 }
 .section,
 .info,
 .qr-box{
-    background:rgba(222,242,255,0.38);
-    border:1px solid rgba(0,166,255,0.08);
-    border-radius:22px;
-    padding:24px;
+    background:rgba(255,255,255,0.5);
+    border:1px solid rgba(255,255,255,0.65);
+    border-radius:28px;
+    padding:28px;
+    box-shadow:
+        0 10px 35px rgba(15,23,42,0.08),
+        inset 0 1px 0 rgba(255,255,255,0.5);
 }
 input{
     width:100%;
-    padding:16px;
-    margin-bottom:16px;
-    border-radius:16px;
-    border:1px solid #c2e5fa;
-    background:#f7fbfd;
+    padding:18px;
+    margin-bottom:18px;
+    border-radius:20px;
+    border:1px solid rgba(125,187,230,0.35);
+    background:rgba(255,255,255,0.9);
     color:#003b73;
     font-size:15px;
     outline:none;
-    transition:0.25s ease;
+    transition:all 0.25s ease;
+    box-shadow:inset 0 1px 3px rgba(0,0,0,0.03);
 }
 input::placeholder{
     color:#7dbbe6;
 }
 input:focus{
     border-color:#00a6ff;
-    box-shadow:0 0 0 4px rgba(0,166,255,0.11);
+    box-shadow:
+        0 0 0 5px rgba(0,166,255,0.12),
+        0 10px 25px rgba(0,166,255,0.08);
+    transform:translateY(-1px);
 }
 .message{
     text-align:center;
@@ -164,11 +188,14 @@ input:focus{
     text-align:center;
 }
 .qr-box img{
-    width:230px;
-    height:230px;
-    border-radius:20px;
+    width:240px;
+    height:240px;
+    border-radius:28px;
     background:white;
-    padding:10px;
+    padding:14px;
+    box-shadow:
+        0 15px 35px rgba(15,23,42,0.12),
+        inset 0 1px 0 rgba(255,255,255,0.8);
 }
 .qr-title{
     color:#003b73;
@@ -186,12 +213,15 @@ input:focus{
 table{
     width:100%;
     border-collapse:collapse;
-    background:rgba(222,242,255,0.38);
-    border-radius:20px;
+    background:rgba(255,255,255,0.55);
+    border-radius:28px;
     overflow:hidden;
+    backdrop-filter:blur(14px);
 }
 th{
-    background:rgba(0,166,255,0.08);
+    background:linear-gradient(135deg,rgba(0,198,255,0.12),rgba(0,114,255,0.12));
+    color:#003b73;
+    font-weight:700;
 }
 td,th{
     padding:18px;
@@ -297,7 +327,7 @@ def home():
 
     <div class="logo">🌊</div>
     <h1>AquaFlow</h1>
-    <div class="subtitle">Pure • Fresh • Premium Drinking Water</div>
+    <div class="subtitle">Luxury Smart Water Experience • Premium Hydration Technology</div>
 
     <div class="nav-grid">
     <a class="menu-btn" href="/add">
@@ -376,7 +406,7 @@ def add():
 
     <div class="logo">💧</div>
     <h2>Add Customer</h2>
-    <div class="subtitle">Register New Water Customer</div>
+    <div class="subtitle">Create Premium AquaFlow Customer Profile</div>
 
     <form method="post">
         <input name="card_id" placeholder="Card ID" autofocus>
@@ -442,7 +472,7 @@ def recharge():
 
     <div class="logo">💳</div>
     <h2>Recharge Wallet</h2>
-    <div class="subtitle">Fast & Secure UPI Recharge</div>
+    <div class="subtitle">Instant Luxury Wallet Recharge via UPI</div>
 
     <form method="post" id="rechargeForm">
         <input name="card_id" placeholder="Card ID" required>
@@ -777,7 +807,7 @@ def report():
 
     <div class="logo">📊</div>
     <h1>AquaFlow Insights</h1>
-    <div class="subtitle">Daily Water Operations & Revenue Overview</div>
+    <div class="subtitle">Premium Business Intelligence & Revenue Analytics</div>
 
     <div class="info">
         <h3>Total Jars Sold: {{jars}}</h3>
