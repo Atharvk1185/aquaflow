@@ -112,6 +112,45 @@ margin-top:20px;
 font-weight:600;
 }
 
+.stat-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px;
+margin:25px 0;
+}
+
+.stat-card{
+background:rgba(255,255,255,0.10);
+padding:20px;
+border-radius:20px;
+text-align:center;
+border:1px solid rgba(255,255,255,0.08);
+}
+
+.stat-card h3{
+font-size:14px;
+color:#d1d5db;
+margin-bottom:10px;
+}
+
+.stat-card p{
+font-size:28px;
+font-weight:700;
+}
+
+.search-box{
+margin-bottom:20px;
+}
+
+.customer-card{
+background:rgba(255,255,255,0.08);
+padding:18px;
+border-radius:18px;
+margin-bottom:15px;
+border:1px solid rgba(255,255,255,0.08);
+line-height:1.9;
+}
+
 .qr-box{
 text-align:center;
 margin-top:25px;
@@ -251,6 +290,23 @@ def home():
 
         conn.close()
 
+    conn = sqlite3.connect(DB)
+    c = conn.cursor()
+
+    c.execute("SELECT COUNT(*) FROM customers")
+    total_customers = c.fetchone()[0]
+
+    c.execute("SELECT COUNT(*) FROM recharge_requests WHERE status='pending'")
+    pending_requests = c.fetchone()[0]
+
+    c.execute("SELECT SUM(amount) FROM transactions WHERE type='deduct'")
+    total_revenue = c.fetchone()[0]
+
+    if total_revenue is None:
+        total_revenue = 0
+
+    conn.close()
+
     return render_template_string(STYLE + """
 
     <div class="container">
@@ -261,6 +317,30 @@ def home():
 
     <div class="subtitle">
     Premium Smart Water Management
+    </div>
+
+    <div class="stat-grid">
+
+        <div class="stat-card">
+            <h3>Total Customers</h3>
+            <p>{{total_customers}}</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Pending Requests</h3>
+            <p>{{pending_requests}}</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Total Revenue</h3>
+            <p>₹{{total_revenue}}</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>System Status</h3>
+            <p>LIVE</p>
+        </div>
+
     </div>
 
     <div class="nav-grid">
@@ -310,7 +390,14 @@ def home():
 
     </div>
 
-    """, message=message, balance=balance, name=name)
+    """,
+    message=message,
+    balance=balance,
+    name=name,
+    total_customers=total_customers,
+    pending_requests=pending_requests,
+    total_revenue=total_revenue
+    )
 
 # ---------- ADD CUSTOMER ----------
 @app.route("/add", methods=["GET", "POST"])
@@ -438,11 +525,19 @@ def recharge():
 
         <input name="card_id" placeholder="Card ID" required>
 
-        <input name="amount" placeholder="Recharge Amount" required>
+        <input type="number" name="amount" placeholder="Recharge Amount" required>
 
         <div class="qr-box">
 
             <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=upi://pay?pa=atharvkurundkar@okicici&pn=AquaFlow&cu=INR">
+
+            <br>
+
+            <a href="upi://pay?pa=atharvkurundkar@okicici&pn=AquaFlow&cu=INR">
+                <button type="button">
+                    📲 Open UPI App
+                </button>
+            </a>
 
             <br><br>
 
@@ -602,14 +697,27 @@ def approve(req_id):
 @app.route("/customers")
 def customers():
 
+    search = request.args.get("search", "")
+
     conn = sqlite3.connect(DB)
     c = conn.cursor()
 
-    c.execute('''
-    SELECT card_id,name,mobile,balance
-    FROM customers
-    ORDER BY id DESC
-    ''')
+    if search:
+
+        c.execute('''
+        SELECT card_id,name,mobile,balance
+        FROM customers
+        WHERE name LIKE ? OR card_id LIKE ? OR mobile LIKE ?
+        ORDER BY id DESC
+        ''', (f'%{search}%', f'%{search}%', f'%{search}%'))
+
+    else:
+
+        c.execute('''
+        SELECT card_id,name,mobile,balance
+        FROM customers
+        ORDER BY id DESC
+        ''')
 
     customers = c.fetchall()
 
@@ -617,33 +725,34 @@ def customers():
 
     return render_template_string(STYLE + """
 
-    <div class="container" style="max-width:1000px;">
+    <div class="container" style="max-width:900px;">
 
     <div class="logo">👥</div>
 
     <h1>Customers</h1>
 
-    <table>
+    <form method="get" class="search-box">
+        <input
+        type="text"
+        name="search"
+        placeholder="Search customer"
+        value="{{search}}">
 
-    <tr>
-        <th>Card ID</th>
-        <th>Name</th>
-        <th>Mobile</th>
-        <th>Balance</th>
-    </tr>
+        <button type="submit">🔍 Search</button>
+    </form>
 
     {% for c in customers %}
 
-    <tr>
-        <td>{{c[0]}}</td>
-        <td>{{c[1]}}</td>
-        <td>{{c[2]}}</td>
-        <td>₹{{c[3]}}</td>
-    </tr>
+    <div class="customer-card">
+
+        <b>🪪 Card ID:</b> {{c[0]}}<br>
+        <b>👤 Name:</b> {{c[1]}}<br>
+        <b>📱 Mobile:</b> {{c[2]}}<br>
+        <b>💰 Balance:</b> ₹{{c[3]}}
+
+    </div>
 
     {% endfor %}
-
-    </table>
 
     <br>
 
@@ -653,7 +762,7 @@ def customers():
 
     </div>
 
-    """, customers=customers)
+    """, customers=customers, search=search)
 
 # ---------- REPORT ----------
 @app.route("/report")
