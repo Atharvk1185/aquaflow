@@ -184,6 +184,76 @@ flex-wrap:wrap;
 gap:10px;
 }
 
+.topbar-left{
+display:flex;
+flex-direction:column;
+}
+
+.topbar-right{
+display:flex;
+align-items:center;
+gap:12px;
+flex-wrap:wrap;
+}
+
+.top-action-btn{
+padding:12px 18px;
+border-radius:14px;
+border:1px solid rgba(255,255,255,0.08);
+background:rgba(255,255,255,0.06);
+color:white;
+font-size:14px;
+font-weight:600;
+text-decoration:none;
+transition:0.25s;
+display:flex;
+align-items:center;
+gap:8px;
+}
+
+.top-action-btn:hover{
+background:rgba(255,255,255,0.12);
+transform:translateY(-2px);
+}
+
+.help-card{
+background:#0b1728;
+border:1px solid rgba(255,255,255,0.06);
+border-radius:24px;
+padding:28px;
+margin-top:30px;
+}
+
+.help-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+gap:18px;
+margin-top:18px;
+}
+
+.help-box{
+background:rgba(255,255,255,0.04);
+padding:22px;
+border-radius:20px;
+transition:0.25s;
+}
+
+.help-box:hover{
+transform:translateY(-3px);
+background:rgba(255,255,255,0.06);
+}
+
+.help-box h3{
+margin-bottom:10px;
+font-size:18px;
+}
+
+.help-box p{
+color:#94a3b8;
+line-height:1.7;
+font-size:14px;
+}
+
 .live-clock{
 background:rgba(255,255,255,0.10);
 padding:10px 18px;
@@ -273,6 +343,12 @@ border-radius:24px;
 .topbar{
 flex-direction:column;
 align-items:flex-start;
+}
+
+.topbar-right{
+width:100%;
+flex-direction:column;
+align-items:stretch;
 }
 
 .stat-grid{
@@ -554,25 +630,43 @@ def home():
     <div class="container">
 
     <div class="topbar">
-        <div>
-            <div class="logo">🌊</div>
-            <h1>AquaFlow Luxe</h1>
-        </div>
+
+    <div class="topbar-left">
+        <div class="logo">🌊</div>
+        <h1>AquaFlow Luxe</h1>
+    </div>
+
+    <div class="topbar-right">
 
         <div class="live-clock" id="clock">
             Loading Time...
         </div>
+
+        <a href="#help-section" class="top-action-btn">
+            🤖 AI Assistant
+        </a>
+
+        <a href="#help-section" class="top-action-btn">
+            📞 Contact Us
+        </a>
+
+        <a href="/logout" class="top-action-btn">
+            🚪 Logout
+        </a>
+
+    </div>
+
     </div>
 
     <div class="subtitle">
-    <span class="live-dot"></span>
-    Premium smart water management platform with luxury dashboard analytics and seamless recharge experience.
+        <span class="live-dot"></span>
+        Enterprise-grade smart water distribution platform designed for premium customer management, seamless recharge operations and intelligent business analytics.
     </div>
 
     <div class="hero-banner">
         <h2>Next Generation Water Distribution</h2>
         <p>
-            AquaFlow Luxe helps you manage customers, monitor recharge requests, track live revenue and automate your smart water delivery workflow with a premium dashboard experience.
+    AquaFlow Luxe delivers a modern digital infrastructure for water distribution businesses with secure wallet management, intelligent customer tracking, real-time operational analytics and streamlined recharge processing.
         </p>
     </div>
 
@@ -620,10 +714,6 @@ def home():
 
         <a href="/requests">
             <button>🧾 Recharge Requests</button>
-        </a>
-
-        <a href="/logout">
-            <button>🚪 Logout</button>
         </a>
 
     </div>
@@ -676,6 +766,34 @@ def home():
             <p>
                 Customer records and recharge history are securely managed using SQLite database storage.
             </p>
+        </div>
+
+    </div>
+
+    <div class="help-card" id="help-section">
+
+        <h2>Support & Assistance</h2>
+
+        <div class="subtitle" style="margin-top:10px;">
+            Get instant platform guidance, customer support and smart operational assistance.
+        </div>
+
+        <div class="help-grid">
+
+            <div class="help-box">
+                <h3>🤖 AI Assistant</h3>
+                <p>
+                    Smart virtual assistant for customer management, recharge guidance and dashboard support.
+                </p>
+            </div>
+
+            <div class="help-box">
+                <h3>📞 Contact Support</h3>
+                <p>
+                    Reach the AquaFlow operations team for technical support, recharge issues and account assistance.
+                </p>
+            </div>
+
         </div>
 
     </div>
