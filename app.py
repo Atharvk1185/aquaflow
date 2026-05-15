@@ -366,6 +366,7 @@ font-size:42px;
 h1{
 font-size:28px;
 }
+}
 
 /* ---- Custom Additions ---- */
 .glow-line{
@@ -763,9 +764,9 @@ def home():
             Loading Time...
         </div>
 
-        <a href="#help-section" class="top-action-btn">
+        <button onclick="openAIChat()" class="top-action-btn" type="button">
             🤖 AI Assistant
-        </a>
+        </button>
 
         <a href="#help-section" class="top-action-btn">
             📞 Contact Us
@@ -1016,11 +1017,15 @@ def home():
 
     <script>
     function openAIChat(){
-        document.getElementById('aiPopup').style.display='flex';
+        const popup = document.getElementById('aiPopup');
+        popup.style.display='flex';
+        popup.style.visibility='visible';
+        popup.style.opacity='1';
     }
 
     function closeAIChat(){
-        document.getElementById('aiPopup').style.display='none';
+        const popup = document.getElementById('aiPopup');
+        popup.style.display='none';
     }
 
     document.addEventListener('click', function(e){
