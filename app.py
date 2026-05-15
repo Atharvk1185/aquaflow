@@ -453,6 +453,106 @@ border-radius:50%;
 right:-120px;
 top:-120px;
 }
+
+/* ---- AI Assistant & Contact Section Additions ---- */
+.ai-chat-popup{
+position:fixed;
+bottom:25px;
+right:25px;
+width:340px;
+background:#0b1728;
+border:1px solid rgba(255,255,255,0.08);
+border-radius:24px;
+padding:20px;
+z-index:9999;
+box-shadow:0 20px 50px rgba(0,0,0,0.45);
+display:none;
+}
+
+.ai-chat-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:15px;
+}
+
+.ai-chat-header h3{
+font-size:18px;
+}
+
+.ai-close{
+background:none;
+border:none;
+color:white;
+font-size:20px;
+cursor:pointer;
+width:auto;
+padding:0;
+box-shadow:none;
+animation:none;
+}
+
+.ai-messages{
+height:260px;
+overflow-y:auto;
+padding-right:5px;
+margin-bottom:14px;
+}
+
+.ai-message{
+background:rgba(255,255,255,0.06);
+padding:12px 14px;
+border-radius:14px;
+margin-bottom:10px;
+font-size:14px;
+line-height:1.6;
+}
+
+.ai-input-row{
+display:flex;
+gap:10px;
+}
+
+.ai-input-row input{
+margin-bottom:0;
+}
+
+.ai-launch-btn{
+position:fixed;
+bottom:25px;
+right:25px;
+width:65px;
+height:65px;
+border-radius:50%;
+font-size:28px;
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:9998;
+}
+
+.contact-info-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:18px;
+margin-top:18px;
+}
+
+.contact-card{
+background:rgba(255,255,255,0.04);
+padding:22px;
+border-radius:20px;
+line-height:1.9;
+}
+
+.contact-card h3{
+margin-bottom:10px;
+}
+
+.contact-card a{
+color:#7dd3fc;
+word-break:break-word;
+}
 </style>
 """
 
@@ -780,21 +880,48 @@ def home():
 
         <div class="help-grid">
 
-            <div class="help-box">
-                <h3>🤖 AI Assistant</h3>
-                <p>
-                    Smart virtual assistant for customer management, recharge guidance and dashboard support.
-                </p>
+    <div class="help-box">
+        <h3>🤖 AI Assistant</h3>
+        <p>
+            Ask recharge, customer management and platform-related questions instantly.
+        </p>
+
+        <button onclick="openAIChat()" style="margin-top:14px;">
+            Open AI Assistant
+        </button>
+    </div>
+
+    <div class="help-box">
+        <h3>📞 Contact Support</h3>
+        <p>
+            Direct business and technical support information for AquaFlow operations.
+        </p>
+
+        <div class="contact-info-grid">
+
+            <div class="contact-card">
+                <h3>📱 Phone</h3>
+                <div>+91 99999 99999</div>
             </div>
 
-            <div class="help-box">
-                <h3>📞 Contact Support</h3>
-                <p>
-                    Reach the AquaFlow operations team for technical support, recharge issues and account assistance.
-                </p>
+            <div class="contact-card">
+                <h3>✉ Email</h3>
+                <a href="mailto:support@aquaflowluxe.com">
+                    support@aquaflowluxe.com
+                </a>
+            </div>
+
+            <div class="contact-card">
+                <h3>🌐 Website</h3>
+                <a href="https://aquaflowluxe.com" target="_blank">
+                    aquaflowluxe.com
+                </a>
             </div>
 
         </div>
+    </div>
+
+</div>
 
     </div>
 
@@ -819,7 +946,108 @@ def home():
         <b>Balance:</b> ₹{{balance}}
     </div>
 
+    <!-- AI Assistant Popup & Launcher Button -->
+    <button class="ai-launch-btn" onclick="openAIChat()">
+    🤖
+    </button>
+
+    <div class="ai-chat-popup" id="aiPopup">
+
+        <div class="ai-chat-header">
+            <h3>🤖 AquaFlow AI</h3>
+
+            <button class="ai-close" onclick="closeAIChat()">
+                ×
+            </button>
+        </div>
+
+        <div class="ai-messages" id="aiMessages">
+
+            <div class="ai-message">
+                Hello 👋<br><br>
+                I can help you with:
+                <br>• Recharge guidance
+                <br>• Customer dashboard help
+                <br>• Wallet support
+                <br>• AquaFlow platform assistance
+            </div>
+
+        </div>
+
+        <div class="ai-input-row">
+
+            <input
+            type="text"
+            id="aiInput"
+            placeholder="Ask AquaFlow AI...">
+
+            <button onclick="sendAIMessage()" style="width:auto; padding:14px 18px;">
+                Send
+            </button>
+
+        </div>
+
+    </div>
+
     <script>
+    function openAIChat(){
+        document.getElementById('aiPopup').style.display='block';
+    }
+
+    function closeAIChat(){
+        document.getElementById('aiPopup').style.display='none';
+    }
+
+    function sendAIMessage(){
+
+        const input = document.getElementById('aiInput');
+        const messages = document.getElementById('aiMessages');
+
+        const text = input.value.trim();
+
+        if(text === '') return;
+
+        messages.innerHTML += `
+        <div class="ai-message">
+            <b>You:</b><br>${text}
+        </div>`;
+
+        let reply = 'Please contact AquaFlow support for more assistance.';
+
+        const lower = text.toLowerCase();
+
+        if(lower.includes('recharge')){
+            reply = 'To recharge wallet, go to Recharge section, pay through UPI and upload payment screenshot.';
+        }
+
+        else if(lower.includes('customer')){
+            reply = 'Customer records can be managed from the Customers dashboard section.';
+        }
+
+        else if(lower.includes('balance')){
+            reply = 'Customer wallet balance is visible inside the Customers section.';
+        }
+
+        else if(lower.includes('report')){
+            reply = 'Business analytics and revenue reports are available in Reports section.';
+        }
+
+        else if(lower.includes('help')){
+            reply = 'You can contact AquaFlow support using the Contact Support section.';
+        }
+
+        setTimeout(() => {
+            messages.innerHTML += `
+            <div class="ai-message">
+                <b>AquaFlow AI:</b><br>${reply}
+            </div>`;
+
+            messages.scrollTop = messages.scrollHeight;
+        }, 500);
+
+        input.value='';
+    }
+
     function updateClock(){
         const now = new Date();
         document.getElementById('clock').innerHTML = now.toLocaleString();
