@@ -290,8 +290,7 @@ font-size:42px;
 h1{
 font-size:28px;
 }
-}
-</style>
+
 /* ---- Custom Additions ---- */
 .glow-line{
 height:1px;
