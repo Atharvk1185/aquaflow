@@ -457,16 +457,37 @@ top:-120px;
 /* ---- AI Assistant & Contact Section Additions ---- */
 .ai-chat-popup{
 position:fixed;
-bottom:25px;
-right:25px;
-width:340px;
+inset:0;
+background:rgba(0,0,0,0.65);
+backdrop-filter:blur(10px);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:9999;
+padding:20px;
+}
+
+.ai-chat-modal{
+width:100%;
+max-width:460px;
 background:#0b1728;
 border:1px solid rgba(255,255,255,0.08);
-border-radius:24px;
-padding:20px;
-z-index:9999;
-box-shadow:0 20px 50px rgba(0,0,0,0.45);
-display:none;
+border-radius:28px;
+padding:24px;
+box-shadow:0 25px 60px rgba(0,0,0,0.55);
+animation:popupShow 0.25s ease;
+}
+
+@keyframes popupShow{
+from{
+opacity:0;
+transform:translateY(20px) scale(0.96);
+}
+
+to{
+opacity:1;
+transform:translateY(0) scale(1);
+}
 }
 
 .ai-chat-header{
@@ -953,8 +974,10 @@ def home():
 
     <div class="ai-chat-popup" id="aiPopup">
 
+    <div class="ai-chat-modal">
+
         <div class="ai-chat-header">
-            <h3>🤖 AquaFlow AI</h3>
+            <h3>🤖 AquaFlow AI Assistant</h3>
 
             <button class="ai-close" onclick="closeAIChat()">
                 ×
@@ -989,14 +1012,25 @@ def home():
 
     </div>
 
+</div>
+
     <script>
     function openAIChat(){
-        document.getElementById('aiPopup').style.display='block';
+        document.getElementById('aiPopup').style.display='flex';
     }
 
     function closeAIChat(){
         document.getElementById('aiPopup').style.display='none';
     }
+
+    document.addEventListener('click', function(e){
+
+        const popup = document.getElementById('aiPopup');
+
+        if(e.target === popup){
+            closeAIChat();
+        }
+    });
 
     function sendAIMessage(){
 
