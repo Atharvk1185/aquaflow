@@ -36,6 +36,31 @@ padding:40px 20px;
 color:white;
 }
 
+body.light-mode{
+background:#eef4ff;
+color:#07111f;
+}
+
+body.light-mode .container,
+body.light-mode .customer-card,
+body.light-mode .plan-card,
+body.light-mode .help-card,
+body.light-mode .action-card,
+body.light-mode .stat-card,
+body.light-mode .contact-card,
+body.light-mode .ai-chat-modal{
+background:white;
+color:#07111f;
+border-color:rgba(0,0,0,0.08);
+}
+
+body.light-mode .subtitle,
+body.light-mode .action-card p,
+body.light-mode .help-box p,
+body.light-mode .contact-card a{
+color:#475569;
+}
+
 .container{
 width:100%;
 max-width:1200px;
@@ -194,6 +219,7 @@ display:flex;
 align-items:center;
 gap:12px;
 flex-wrap:wrap;
+justify-content:flex-end;
 }
 
 .top-action-btn{
@@ -764,6 +790,10 @@ def home():
             Loading Time...
         </div>
 
+        <button onclick="toggleTheme()" class="top-action-btn" type="button">
+            🌙 Theme
+        </button>
+
         <button onclick="openAIChat()" class="top-action-btn" type="button">
             🤖 AI Assistant
         </button>
@@ -816,6 +846,18 @@ def home():
 
     </div>
 
+    <div class="help-card" style="margin-bottom:30px;">
+
+        <h2>📈 Live Analytics Overview</h2>
+
+        <div class="subtitle" style="margin-top:10px;">
+            Real-time AquaFlow performance insights and business growth visualization.
+        </div>
+
+        <canvas id="revenueChart" height="110"></canvas>
+
+    </div>
+
     <div class="nav-grid">
 
         <a href="/add">
@@ -842,26 +884,32 @@ def home():
 
     <div class="plan-grid">
 
-        <div class="plan-card">
-            <h3>Starter</h3>
-            <div class="plan-price">₹99</div>
-            <div style="margin-top:10px;color:#94a3b8;">Perfect for regular households</div>
-            <div class="badge">POPULAR</div>
+    <div class="plan-card">
+        <h3>⚡ Smart Recharge System</h3>
+        <div class="plan-price">24×7</div>
+        <div style="margin-top:10px;color:#94a3b8;">
+            Instant recharge request management with secure wallet updates.
         </div>
+        <div class="badge">LIVE SERVICE</div>
+    </div>
 
-        <div class="plan-card">
-            <h3>Premium</h3>
-            <div class="plan-price">₹499</div>
-            <div style="margin-top:10px;color:#94a3b8;">Most popular commercial plan</div>
-            <div class="badge">BEST VALUE</div>
+    <div class="plan-card">
+        <h3>📊 Real-Time Analytics</h3>
+        <div class="plan-price">AI</div>
+        <div style="margin-top:10px;color:#94a3b8;">
+            Monitor revenue, customers and recharge activities from one dashboard.
         </div>
+        <div class="badge">SMART DASHBOARD</div>
+    </div>
 
-        <div class="plan-card">
-            <h3>Elite</h3>
-            <div class="plan-price">₹999</div>
-            <div style="margin-top:10px;color:#94a3b8;">High-volume premium distribution</div>
-            <div class="badge">VIP</div>
+    <div class="plan-card">
+        <h3>🔐 Secure Customer System</h3>
+        <div class="plan-price">SAFE</div>
+        <div style="margin-top:10px;color:#94a3b8;">
+            Securely manage customer records, balances and transaction history.
         </div>
+        <div class="badge">PROTECTED</div>
+    </div>
 
     </div>
 
@@ -1015,7 +1063,70 @@ def home():
 
 </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script>
+    function toggleTheme(){
+
+        document.body.classList.toggle('light-mode');
+
+        if(document.body.classList.contains('light-mode')){
+            localStorage.setItem('theme','light');
+        }
+
+        else{
+            localStorage.setItem('theme','dark');
+        }
+    }
+
+    window.onload = function(){
+
+        const theme = localStorage.getItem('theme');
+
+        if(theme === 'light'){
+            document.body.classList.add('light-mode');
+        }
+
+        const ctx = document.getElementById('revenueChart');
+
+        if(ctx){
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+                    datasets: [{
+                        label: 'Revenue',
+                        data: [120,190,300,280,420,500,650],
+                        tension:0.4,
+                        fill:true
+                    }]
+                },
+                options: {
+                    responsive:true,
+                    plugins:{
+                        legend:{
+                            labels:{
+                                color:'#94a3b8'
+                            }
+                        }
+                    },
+                    scales:{
+                        y:{
+                            ticks:{
+                                color:'#94a3b8'
+                            }
+                        },
+                        x:{
+                            ticks:{
+                                color:'#94a3b8'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    }
     function openAIChat(){
         const popup = document.getElementById('aiPopup');
         popup.style.display='flex';
@@ -1482,6 +1593,14 @@ def customers():
         src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data={{c[0]}}"
         style="margin-top:15px;border-radius:16px;background:white;padding:10px;">
 
+        <br><br>
+
+        <a href="/delete_customer/{{c[0]}}">
+            <button style="background:linear-gradient(135deg,#ef4444,#dc2626);">
+                🗑 Delete Customer
+            </button>
+        </a>
+
     </div>
 
     {% endfor %}
@@ -1495,6 +1614,23 @@ def customers():
     </div>
 
     """, customers=customers, search=search)
+
+# ---------- DELETE CUSTOMER ----------
+@app.route('/delete_customer/<card_id>')
+def delete_customer(card_id):
+
+    if 'admin' not in session:
+        return redirect('/login')
+
+    conn = sqlite3.connect(DB)
+    c = conn.cursor()
+
+    c.execute('DELETE FROM customers WHERE card_id=?', (card_id,))
+
+    conn.commit()
+    conn.close()
+
+    return redirect('/customers')
 
 # ---------- REPORT ----------
 @app.route("/report")
