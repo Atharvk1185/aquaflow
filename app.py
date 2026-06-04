@@ -3,9 +3,12 @@ import sqlite3
 from datetime import datetime
 from werkzeug.utils import secure_filename
 import os
+import requests
 
 app = Flask(__name__)
 app.secret_key = "aquaflow_super_secure_key"
+
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "")
 
 DB = "water.db"
 
@@ -1053,9 +1056,9 @@ def home():
             id="aiInput"
             placeholder="Ask AquaFlow AI...">
 
-            <button onclick="sendAIMessage()" style="width:auto; padding:14px 18px;">
-                Send
-            </button>
+        <button onclick="sendAIMessage()" style="width:auto; padding:14px 18px;">
+            🚀 Send
+        </button>
 
         </div>
 
@@ -1148,7 +1151,7 @@ def home():
         }
     });
 
-    function sendAIMessage(){
+    async function sendAIMessage(){
 
         const input = document.getElementById('aiInput');
         const messages = document.getElementById('aiMessages');
@@ -1162,40 +1165,49 @@ def home():
             <b>You:</b><br>${text}
         </div>`;
 
-        let reply = 'Please contact AquaFlow support for more assistance.';
+        messages.innerHTML += `
+        <div class="ai-message" id="typingMsg">
+            <b>AquaFlow AI:</b><br>Typing...
+        </div>`;
 
-        const lower = text.toLowerCase();
+        messages.scrollTop = messages.scrollHeight;
 
-        if(lower.includes('recharge')){
-            reply = 'To recharge wallet, go to Recharge section, pay through UPI and upload payment screenshot.';
-        }
+        input.value='';
 
-        else if(lower.includes('customer')){
-            reply = 'Customer records can be managed from the Customers dashboard section.';
-        }
+        try{
 
-        else if(lower.includes('balance')){
-            reply = 'Customer wallet balance is visible inside the Customers section.';
-        }
+            const response = await fetch('/ai_chat', {
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body: JSON.stringify({
+                    message:text
+                })
+            });
 
-        else if(lower.includes('report')){
-            reply = 'Business analytics and revenue reports are available in Reports section.';
-        }
+            const data = await response.json();
 
-        else if(lower.includes('help')){
-            reply = 'You can contact AquaFlow support using the Contact Support section.';
-        }
+            document.getElementById('typingMsg').remove();
 
-        setTimeout(() => {
             messages.innerHTML += `
             <div class="ai-message">
-                <b>AquaFlow AI:</b><br>${reply}
+                <b>AquaFlow AI:</b><br>${data.reply}
             </div>`;
 
             messages.scrollTop = messages.scrollHeight;
-        }, 500);
+        }
 
-        input.value='';
+        catch(error){
+
+            document.getElementById('typingMsg').remove();
+
+            messages.innerHTML += `
+            <div class="ai-message">
+                <b>AquaFlow AI:</b><br>
+                Unable to connect to AI server.
+            </div>`;
+        }
     }
 
     function updateClock(){
@@ -1709,6 +1721,59 @@ def report():
 
     """, jars=jars, revenue=revenue)
 
+# ---------- AI CHAT API ----------
+@app.route('/ai_chat', methods=['POST'])
+def ai_chat():
+
+    try:
+        data = request.get_json()
+        user_message = data.get('message', '')
+
+        if not user_message:
+            return jsonify({
+                'reply': 'Please enter a message.'
+            })
+
+        if not OPENROUTER_API_KEY:
+            return jsonify({
+                'reply': 'AI API key is not configured yet.'
+            })
+
+        response = requests.post(
+            'https://openrouter.ai/api/v1/chat/completions',
+            headers={
+                'Authorization': f'Bearer {OPENROUTER_API_KEY}',
+                'Content-Type': 'application/json'
+            },
+            json={
+                'model': 'openai/gpt-4o-mini',
+                'messages': [
+                    {
+                        'role': 'system',
+                        'content': 'You are AquaFlow AI, a premium assistant for a smart water distribution platform. Help users with recharge, wallet, customer support, reports and platform guidance.'
+                    },
+                    {
+                        'role': 'user',
+                        'content': user_message
+                    }
+                ]
+            },
+            timeout=30
+        )
+
+        result = response.json()
+
+        reply = result['choices'][0]['message']['content']
+
+        return jsonify({
+            'reply': reply
+        })
+
+    except Exception as e:
+        return jsonify({
+            'reply': f'AI Error: {str(e)}'
+        })
+
 # ---------- API STATS ----------
 @app.route('/api/stats')
 def api_stats():
@@ -1744,4 +1809,4 @@ def uploaded_file(filename):
 
 # ---------- RUN ----------
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True) 
